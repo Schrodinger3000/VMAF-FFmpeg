@@ -53,6 +53,7 @@ RUN apt-get install libvpx-dev -y
 RUN apt-get install libfdk-aac-dev -y
 RUN apt-get install libmp3lame-dev -y
 RUN apt-get install libopus-dev -y
+RUN apt install ocl-icd-opencl-dev -y
 RUN cd ~/ffmpeg_sources && \
 wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
 tar xjvf ffmpeg-snapshot.tar.bz2 &&\
@@ -76,6 +77,7 @@ PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./conf
   --enable-libx265 \
   --enable-libvmaf \
   --enable-version3 \
+  --enable-opencl \
   --enable-nonfree && \
 PATH="$HOME/bin:$PATH" make && \
 make install && \
