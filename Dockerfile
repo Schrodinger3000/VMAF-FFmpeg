@@ -78,7 +78,7 @@ PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./conf
   --enable-libvmaf \
   --enable-version3 \
   --enable-opencl \
-  --enable-gnutls \
+  --enable-openssl \
   --enable-nonfree && \
 PATH="$HOME/bin:$PATH" make && \
 make install && \
