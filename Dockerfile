@@ -54,6 +54,7 @@ RUN apt-get install libfdk-aac-dev -y
 RUN apt-get install libmp3lame-dev -y
 RUN apt-get install libopus-dev -y
 RUN apt install ocl-icd-opencl-dev -y
+RUN apt-get install libssl-dev -y
 RUN cd ~/ffmpeg_sources && \
 wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
 tar xjvf ffmpeg-snapshot.tar.bz2 &&\
