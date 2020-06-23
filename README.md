@@ -1,5 +1,5 @@
 # VMAF-FFmpeg
-Docker file to build a ffmpeg image under Ubuntu with the external libvmaf of Netflix VMAF Open Source
+Docker file to build a ffmpeg image under Ubuntu with the external libvmaf of Netflix VMAF Open Source. Updated to build `libvmaf` with Meson/Ninja per [libvmaf instructions](https://github.com/Netflix/vmaf/tree/master/libvmaf).
 
 ## Build
 ```
