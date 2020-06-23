@@ -3,20 +3,21 @@ RUN apt-get update -qq
 
 RUN apt-get install -y build-essential git
 ENV TZ=UTC
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get install -y python python-setuptools python-dev python-tk python-pip
-RUN pip install --upgrade pip
-RUN pip install numpy scipy matplotlib notebook pandas sympy nose scikit-learn scikit-image h5py sureal
 
-RUN git clone --depth 1 https://github.com/Netflix/vmaf.git vmaf
-RUN cd vmaf/ptools && \
- make
-RUN cd vmaf/wrapper && \
- make
-RUN cd vmaf && \
- make install
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get install -y python3 python3-pip python3-setuptools python3-wheel ninja-build doxygen nasm && pip3 install --user meson
+RUN pip3 install --upgrade pip
+RUN pip3 install numpy scipy matplotlib notebook pandas sympy nose scikit-learn scikit-image h5py sureal
+
+RUN git clone --depth 1 https://github.com/Netflix/vmaf.git vmaf 
+
+ENV PATH="${PATH}:/root/.local/bin"
+
+RUN cd vmaf/libvmaf && meson build --buildtype release && ninja -vC build && ninja -vC build install
+
 RUN cd && \
-apt-get update -qq && apt-get -y install \
+apt-get -y install \
 autoconf \
   automake \
   build-essential \
@@ -37,14 +38,7 @@ autoconf \
   wget \
   zlib1g-dev
 RUN mkdir -p ~/ffmpeg_sources ~/bin
-RUN cd ~/ffmpeg_sources && \
-wget https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.bz2 && \
-tar xjvf nasm-2.13.03.tar.bz2 && \
-cd nasm-2.13.03 && \
-./autogen.sh && \
-PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" && \
-make && \
-make install
+
 RUN cd
 RUN apt-get install yasm
 RUN apt-get install libx264-dev -y
@@ -81,8 +75,12 @@ PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./conf
   --enable-opencl \
   --enable-openssl \
   --enable-nonfree && \
-PATH="$HOME/bin:$PATH" make && \
-make install && \
+PATH="$HOME/bin:$PATH" make -j4 && \
+make -j4 install && \
 hash -r
 RUN cd && \
-cp bin/ffmpeg /usr/local/bin
+cp bin/ff* /usr/local/bin
+
+WORKDIR /ffmpeg_working
+
+ENTRYPOINT ["/usr/local/bin/ffmpeg"]
